@@ -1,41 +1,60 @@
+float r;
+
 void setup()
 {
   size(500, 500);
-  frameRate(200);
+  frameRate(60);
+
+  r = (width-(width/5))/2;
 }
 
-float r = 200;
 float theta = 0.0;
 
-ArrayList<float[]> circleMultipliers = new ArrayList<float[]>();
-ArrayList<CirclePoint> circlePoints = new ArrayList<CirclePoint>();
+ArrayList<Circle> circles = new ArrayList<Circle>();
+//ArrayList<CirclePoint> circlePoints = new ArrayList<CirclePoint>();
+
+int multsAdded = 0;
 
 void draw()
 {
+  if (multsAdded != circles.size())
+  {
+    multsAdded = circles.size();
+    //println(multsAdded);
+  }
   background(0);
 
   theta += 1;
 
-  if (theta % ((int)(Math.random()*300)) == 0 && circleMultipliers.size() < 25)
+  if (theta % ((int)(Math.random()*300)) == 0 && circles.size() < 40)
   {
-    circleMultipliers.add(new float[]{(float)Math.random(), (float)Math.random(), theta, 0.0});
+    //circleMultipliers.add(new float[]{(float)Math.random(), (float)Math.random(), theta, 0.0});
+    //circles.add(new float[]{(float)Math.random()*360, (float)Math.random(), theta, 0.0});
+    circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
   }
 
-  for (int i=0; i < circleMultipliers.size(); i++)
+  for (int i=0; i < circles.size(); i++)
   {
-    addCirclePoint(circleMultipliers.get(i)[0], circleMultipliers.get(i)[1], circleMultipliers.get(i)[2]);
-    circleMultipliers.get(i)[3] += 1;
-    if (circleMultipliers.get(i)[3] >= 1000)
+    Circle circle = circles.get(i);
+    circle.addPoint(theta);
+    circle.decayTime += 1;
+    circle.drawCircle();
+    if (circle.decayTime >= 5000)
     {
-      //circleMultipliers.remove(i);
+      circles.remove(i);
     }
   }
-  drawCirclePoints();
+  //drawCirclePoints();
 }
 
-void addCirclePoint(float xMult, float yMult, float thetaShift)
+/*void addCirclePoint(float randomRotation, float randomMult, float thetaShift)
 {
-  circlePoints.add(new CirclePoint(width/2 + (r * cos((theta-thetaShift)*3.1415/180.0)*xMult), height/2 + (r * sin((theta-thetaShift)*3.1415/180.0) * yMult), 100.0));
+  //circlePoints.add(new CirclePoint((width/2 + (r * cos((theta-thetaShift)*3.1415/180.0))*cos(randomRotation*3.1415/180)), (height/2 + (r * sin((theta-thetaShift)*3.1415/180.0)) * sin(randomRotation*3.1415/180)), 100.0));
+  float x = (r * cos((theta-thetaShift)*3.1415/180.0))*randomMult;
+  float y = (r * sin((theta-thetaShift)*3.1415/180.0));
+  float xTransformed = (x*cos(randomRotation*3.1415/180.0)) - (y*sin(randomRotation*3.1415/180.0));
+  float yTransformed = (y*cos(randomRotation*3.1415/180.0)) + (x*sin(randomRotation*3.1415/180.0));
+  circlePoints.add(new CirclePoint(xTransformed + width/2, yTransformed + height/2, 100.0));
 }
 
 void drawCirclePoints()
@@ -49,6 +68,45 @@ void drawCirclePoints()
       {
         circlePoints.remove(i);
       }
+  }
+}*/
+
+class Circle
+{
+  float randomRotation = 0.0;
+  float thetaShift = 0.0;
+  float randomMult = 0.0;
+  int decayTime = 0;
+  ArrayList<CirclePoint> circlePoints = new ArrayList<CirclePoint>();
+
+  Circle(float randomRotation, float randomMult, float thetaShift)
+  {
+    this.randomRotation = randomRotation;
+    this.thetaShift = thetaShift;
+    this.randomMult = randomMult;
+  }
+
+  void addPoint(float currentTheta)
+  {
+    float x = (r * cos((currentTheta-thetaShift)*3.1415/180.0))*randomMult;
+    float y = (r * sin((currentTheta-thetaShift)*3.1415/180.0));
+    float xTransformed = (x*cos(randomRotation*3.1415/180.0)) - (y*sin(randomRotation*3.1415/180.0));
+    float yTransformed = (y*cos(randomRotation*3.1415/180.0)) + (x*sin(randomRotation*3.1415/180.0));
+    circlePoints.add(new CirclePoint(xTransformed + width/2, yTransformed + height/2, 100.0));
+  }
+
+  void drawCircle()
+  {
+    for (int i=0; i < circlePoints.size(); i++)
+    {
+      CirclePoint point = circlePoints.get(i);
+      point.fadeMore();
+      point.show();
+      if (point.fade <= 0.0)
+      {
+        circlePoints.remove(i);
+      }
+    }
   }
 }
 
@@ -72,7 +130,7 @@ class CirclePoint
 
   void show()
   {
-    strokeWeight(5);
+    strokeWeight(ceil(1.0*width/100));
     stroke(255, 0, 255, fade);
     point(x, y);
   }
