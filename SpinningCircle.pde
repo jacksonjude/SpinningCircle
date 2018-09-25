@@ -1,4 +1,6 @@
-float r;
+final float thetaAddSpeed = 1;
+
+
 
 void setup()
 {
@@ -8,26 +10,37 @@ void setup()
   r = (width-(width/5))/2;
 }
 
+float r;
 float theta = 0.0;
 
 ArrayList<Circle> circles = new ArrayList<Circle>();
 
-int multsAdded = 0;
+//int multsAdded = 0;
 
 void draw()
 {
-  if (multsAdded != circles.size())
+  translate(width/2, height/2);
+  /*if (multsAdded != circles.size())
   {
     multsAdded = circles.size();
-    //println(multsAdded);
-  }
+    println(multsAdded);
+  }*/
   background(0);
 
-  theta += 1;
+  fill(255, 50);
+  textSize(25);
+  textAlign(LEFT);
+  text(circles.size(), -width/2 + 5, -height/2 + 30);
+
+  theta += thetaAddSpeed;
 
   if (theta % ((int)(Math.random()*300)) == 0 && circles.size() < 40)
   {
     circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
+    if (circles.size() == 40)
+    {
+      circles.add(new Circle(0.0, 1, theta));
+    }
   }
 
   for (int i=0; i < circles.size(); i++)
@@ -41,6 +54,11 @@ void draw()
       //circles.remove(i);
     }
   }
+}
+
+void mousePressed()
+{
+  circles = new ArrayList<Circle>();
 }
 
 class Circle
@@ -64,7 +82,7 @@ class Circle
     float y = (r * sin((currentTheta-thetaShift)*3.1415/180.0));
     float xTransformed = (x*cos(randomRotation*3.1415/180.0)) - (y*sin(randomRotation*3.1415/180.0));
     float yTransformed = (y*cos(randomRotation*3.1415/180.0)) + (x*sin(randomRotation*3.1415/180.0));
-    circlePoints.add(new CirclePoint(xTransformed + width/2, yTransformed + height/2, 100.0));
+    circlePoints.add(new CirclePoint(xTransformed, yTransformed, 100.0));
   }
 
   void drawCircle()
@@ -97,7 +115,7 @@ class CirclePoint
 
   void fadeMore()
   {
-    fade -= 1.0;
+    fade -= thetaAddSpeed;
   }
 
   void show()
