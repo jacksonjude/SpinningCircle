@@ -18,7 +18,8 @@ void draw()
 
   if (theta % ((int)(Math.random()*300)) == 0 && circleMultipliers.size() < 25)
   {
-    circleMultipliers.add(new float[]{(float)Math.random(), (float)Math.random(), theta, 0.0});
+    //circleMultipliers.add(new float[]{(float)Math.random(), (float)Math.random(), theta, 0.0});
+    circleMultipliers.add(new float[]{1.0, 1.0, theta, 0.0});
   }
 
   for (int i=0; i < circleMultipliers.size(); i++)
@@ -35,7 +36,7 @@ void draw()
 
 void addCirclePoint(float xMult, float yMult, float thetaShift)
 {
-  circlePoints.add(new CirclePoint(width/2 + (r * cos((theta-thetaShift)*3.1415/180.0)*xMult), height/2 + (r * sin((theta-thetaShift)*3.1415/180.0) * yMult), 100.0));
+  circlePoints.add(new CirclePoint(width/2 + (r * cos((theta-thetaShift)*3.1415/180.0)*xMult*cos((float)Math.random()*360*3.1415/180.0)), height/2 + (r * sin((theta-thetaShift)*3.1415/180.0)*yMult*sin((float)Math.random()*360*3.1415/180)), 100.0));
 }
 
 void drawCirclePoints()
