@@ -1,6 +1,6 @@
+import java.awt.Color;
+
 final float thetaAddSpeed = 1;
-
-
 
 void setup()
 {
@@ -31,6 +31,16 @@ void draw()
   textSize(25);
   textAlign(LEFT);
   text(circles.size(), -width/2 + 5, -height/2 + 30);
+
+  fill(255, 50);
+  textSize(25);
+  textAlign(RIGHT);
+  /*ArrayList<String> strings = new ArrayList<String>();
+  int index = 0;
+  while (index < Float.toString(frameRate).length()) {
+      strings.add(Float.toString(frameRate).substring(index, Math.min(index + 4,Float.toString(frameRate).length())));
+  }*/
+  text(Float.toString(frameRate).substring(0, Math.min(4,Float.toString(frameRate).length())), width/2 - 5, -height/2 + 30);
 
   theta += thetaAddSpeed;
 
@@ -120,8 +130,12 @@ class CirclePoint
 
   void show()
   {
+    int rgb = Color.HSBtoRGB(100-fade / 100, 1, 1);
+    float red = (rgb>>16)&0xFF;
+    float green = (rgb>>8)&0xFF;
+    float blue = rgb&0xFF;
     strokeWeight(ceil(1.0*width/100));
-    stroke(255, 0, 255, fade);
+    stroke(red, green, blue, fade);
     point(x, y);
   }
 }
