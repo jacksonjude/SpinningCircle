@@ -29,6 +29,9 @@ void draw()
   fill(255, 50);
   textSize(25);
   textAlign(RIGHT);
+  DecimalFormat decimalFormat = new DecimalFormat("#.00");
+  String frameRateString = decimalFormat.format(frameRate);
+  text(frameRateString, width/2 - 5, -height/2 + 30);
   //text(Float.toString(frameRate).substring(0, Math.min(4,Float.toString(frameRate).length())), width/2 - 5, -height/2 + 30);
 
   theta += thetaAddSpeed;
