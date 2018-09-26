@@ -15,16 +15,9 @@ float theta = 0.0;
 
 ArrayList<Circle> circles = new ArrayList<Circle>();
 
-//int multsAdded = 0;
-
 void draw()
 {
   translate(width/2, height/2);
-  /*if (multsAdded != circles.size())
-  {
-    multsAdded = circles.size();
-    println(multsAdded);
-  }*/
   background(0);
 
   fill(255, 50);
@@ -35,12 +28,7 @@ void draw()
   fill(255, 50);
   textSize(25);
   textAlign(RIGHT);
-  /*ArrayList<String> strings = new ArrayList<String>();
-  int index = 0;
-  while (index < Float.toString(frameRate).length()) {
-      strings.add(Float.toString(frameRate).substring(index, Math.min(index + 4,Float.toString(frameRate).length())));
-  }*/
-  text(Float.toString(frameRate).substring(0, Math.min(4,Float.toString(frameRate).length())), width/2 - 5, -height/2 + 30);
+  //text(Float.toString(frameRate).substring(0, Math.min(4,Float.toString(frameRate).length())), width/2 - 5, -height/2 + 30);
 
   theta += thetaAddSpeed;
 
@@ -128,12 +116,47 @@ class CirclePoint
     fade -= thetaAddSpeed;
   }
 
+  public static int HSBtoRGB(float hue, float saturation, float brightness)
+ 710:   {
+ 711:     if (saturation == 0)
+ 712:       return convert(brightness, brightness, brightness, 0);
+ 713:     if (saturation < 0 || saturation > 1 || brightness < 0 || brightness > 1)
+ 714:       throw new IllegalArgumentException();
+ 715:     hue = hue - (float) Math.floor(hue);
+ 716:     int i = (int) (6 * hue);
+ 717:     float f = 6 * hue - i;
+ 718:     float p = brightness * (1 - saturation);
+ 719:     float q = brightness * (1 - saturation * f);
+ 720:     float t = brightness * (1 - saturation * (1 - f));
+ 721:     switch (i)
+ 722:       {
+ 723:       case 0:
+ 724:         return convert(brightness, t, p, 0);
+ 725:       case 1:
+ 726:         return convert(q, brightness, p, 0);
+ 727:       case 2:
+ 728:         return convert(p, brightness, t, 0);
+ 729:       case 3:
+ 730:         return convert(p, q, brightness, 0);
+ 731:       case 4:
+ 732:         return convert(t, p, brightness, 0);
+ 733:       case 5:
+ 734:         return convert(brightness, p, q, 0);
+ 735:       default:
+ 736:         throw new InternalError("impossible");
+ 737:       }
+ 738:   }
+
   void show()
   {
-    int rgb = Color.HSBtoRGB(100-fade / 100, 1, 1);
-    float red = (rgb>>16)&0xFF;
-    float green = (rgb>>8)&0xFF;
-    float blue = rgb&0xFF;
+    //int rgb = java.awt.Color.HSBtoRGB(100-fade / 100, 1, 1);
+    //float red = (rgb>>16)&0xFF;
+    //float green = (rgb>>8)&0xFF;
+    //float blue = rgb&0xFF;
+    float[] rgb = hsvToRgb((100.0-fade) / 100.0, 1.0, 1.0);
+    float red = rgb[0];
+    float green = rgb[1];
+    float blue = rgb[2];
     strokeWeight(ceil(1.0*width/100));
     stroke(red, green, blue, fade);
     point(x, y);
