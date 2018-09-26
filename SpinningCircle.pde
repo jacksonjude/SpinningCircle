@@ -160,14 +160,14 @@ return (alphaval << 24) | (redval << 16) | (greenval << 8) | blueval;
 
   void show()
   {
-    //int rgb = java.awt.Color.HSBtoRGB(100-fade / 100, 1, 1);
-    //float red = (rgb>>16)&0xFF;
-    //float green = (rgb>>8)&0xFF;
-    //float blue = rgb&0xFF;
-    float[] rgb = hsvToRgb((100.0-fade) / 100.0, 1.0, 1.0);
-    float red = rgb[0];
-    float green = rgb[1];
-    float blue = rgb[2];
+    int rgb = HSBtoRGB(100-fade / 100, 1, 1);
+    float red = (rgb>>16)&0xFF;
+    float green = (rgb>>8)&0xFF;
+    float blue = rgb&0xFF;
+    //float[] rgb = hsvToRgb((100.0-fade) / 100.0, 1.0, 1.0);
+    //float red = rgb[0];
+    //float green = rgb[1];
+    //float blue = rgb[2];
     strokeWeight(ceil(1.0*width/100));
     stroke(red, green, blue, fade);
     point(x, y);
