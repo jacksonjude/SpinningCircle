@@ -117,35 +117,46 @@ class CirclePoint
   }
 
   public static int HSBtoRGB(float hue, float saturation, float brightness)
- 710:   {
- 711:     if (saturation == 0)
- 712:       return convert(brightness, brightness, brightness, 0);
- 713:     if (saturation < 0 || saturation > 1 || brightness < 0 || brightness > 1)
- 714:       throw new IllegalArgumentException();
- 715:     hue = hue - (float) Math.floor(hue);
- 716:     int i = (int) (6 * hue);
- 717:     float f = 6 * hue - i;
- 718:     float p = brightness * (1 - saturation);
- 719:     float q = brightness * (1 - saturation * f);
- 720:     float t = brightness * (1 - saturation * (1 - f));
- 721:     switch (i)
- 722:       {
- 723:       case 0:
- 724:         return convert(brightness, t, p, 0);
- 725:       case 1:
- 726:         return convert(q, brightness, p, 0);
- 727:       case 2:
- 728:         return convert(p, brightness, t, 0);
- 729:       case 3:
- 730:         return convert(p, q, brightness, 0);
- 731:       case 4:
- 732:         return convert(t, p, brightness, 0);
- 733:       case 5:
- 734:         return convert(brightness, p, q, 0);
- 735:       default:
- 736:         throw new InternalError("impossible");
- 737:       }
- 738:   }
+ {
+ if (saturation == 0)
+   return convert(brightness, brightness, brightness, 0);
+ if (saturation < 0 || saturation > 1 || brightness < 0 || brightness > 1)
+   throw new IllegalArgumentException();
+ hue = hue - (float) Math.floor(hue);
+ int i = (int) (6 * hue);
+ float f = 6 * hue - i;
+ float p = brightness * (1 - saturation);
+ float q = brightness * (1 - saturation * f);
+ float t = brightness * (1 - saturation * (1 - f));
+ switch (i)
+ {
+ case 0:
+ return convert(brightness, t, p, 0);
+ case 1:
+ return convert(q, brightness, p, 0);
+ case 2:
+ return convert(p, brightness, t, 0);
+ case 3:
+ return convert(p, q, brightness, 0);
+ case 4:
+ return convert(t, p, brightness, 0);
+ case 5:
+ return convert(brightness, p, q, 0);
+ default:
+ throw new InternalError("impossible");
+ }
+ }
+ 
+ private static int convert(float red, float green, float blue, float alpha)
+{
+if (red < 0 || red > 1 || green < 0 || green > 1 || blue < 0 || blue > 1 || alpha < 0 || alpha > 1)
+throw new IllegalArgumentException("Bad RGB values");
+int redval = Math.round(255 * red);
+int greenval = Math.round(255 * green);
+int blueval = Math.round(255 * blue);
+int alphaval = Math.round(255 * alpha);
+return (alphaval << 24) | (redval << 16) | (greenval << 8) | blueval;
+}
 
   void show()
   {
