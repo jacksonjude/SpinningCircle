@@ -1,6 +1,7 @@
 import java.awt.Color;
 
 final float thetaAddSpeed = 1;
+final int maxCircles = 30;
 
 void setup()
 {
@@ -32,10 +33,10 @@ void draw()
 
   theta += thetaAddSpeed;
 
-  if (theta % ((int)(Math.random()*300)) == 0 && circles.size() < 40)
+  if (theta % ((int)(Math.random()*300)) == 0 && circles.size() < maxCircles)
   {
     circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
-    if (circles.size() == 40)
+    if (circles.size() == maxCircles)
     {
       circles.add(new Circle(0.0, 1, theta));
     }
