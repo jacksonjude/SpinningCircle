@@ -6,6 +6,7 @@ void setup()
   size(500, 500);
   frameRate(60);
   surface.setResizable(true);
+  surface.setAlwaysOnTop(true);
 }
 
 float r;
@@ -18,14 +19,28 @@ void draw()
   thetaAddSpeed = 60.0/frameRate;
   r = (width-(width/5))/2;
 
-  if (floor(width) != floor(height))
-  {
-    surface.setSize(width, width);
-  }
-
   translate(width/2, height/2);
   background(0);
 
+  displayStats();
+
+  theta += thetaAddSpeed;
+
+  if (frameCount % ((int)(Math.random()*50)+20) == 0 && circles.size() < maxCircles)
+  {
+    addCircle();
+
+    if (circles.size() == maxCircles)
+    {
+      circles.add(new Circle(0.0, 1, theta));
+    }
+  }
+
+  drawCircles();
+}
+
+void displayStats()
+{
   fill(255, 50);
   textSize(width/20);
   textAlign(LEFT);
@@ -35,18 +50,10 @@ void draw()
   textSize(width/20);
   textAlign(RIGHT);
   text(frameRate, width/2 - width/100, -height/2 + height/16);
+}
 
-  theta += thetaAddSpeed;
-
-  if (frameCount % ((int)(Math.random()*50)+20) == 0 && circles.size() < maxCircles)
-  {
-    circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
-    if (circles.size() == maxCircles)
-    {
-      circles.add(new Circle(0.0, 1, theta));
-    }
-  }
-
+void drawCircles()
+{
   for (int i=0; i < circles.size(); i++)
   {
     Circle circle = circles.get(i);
@@ -60,9 +67,25 @@ void draw()
   }
 }
 
-void mousePressed()
+void addCircle()
 {
-  circles = new ArrayList<Circle>();
+  circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
+}
+
+void keyPressed()
+{
+  if (key == ENTER)
+  {
+    addCircle();
+  }
+  else if (keyCode == SHIFT)
+  {
+    circles = new ArrayList<Circle>();
+  }
+  else if (key == 'r')
+  {
+    surface.setSize(width, width);
+  }
 }
 
 class Circle
