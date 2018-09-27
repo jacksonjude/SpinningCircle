@@ -1,14 +1,11 @@
-import java.awt.Color;
-
-final float thetaAddSpeed = 1;
-final int maxCircles = 30;
+float thetaAddSpeed = 1;
+final int maxCircles = 40;
 
 void setup()
 {
   size(500, 500);
   frameRate(60);
-
-  r = (width-(width/5))/2;
+  surface.setResizable(true);
 }
 
 float r;
@@ -18,25 +15,30 @@ ArrayList<Circle> circles = new ArrayList<Circle>();
 
 void draw()
 {
+  thetaAddSpeed = 60.0/frameRate;
+  r = (width-(width/5))/2;
+
+  if (floor(width) != floor(height))
+  {
+    surface.setSize(width, width);
+  }
+
   translate(width/2, height/2);
   background(0);
 
   fill(255, 50);
-  textSize(25);
+  textSize(width/20);
   textAlign(LEFT);
-  text(circles.size(), -width/2 + 5, -height/2 + 30);
+  text(circles.size(), -width/2 + width/100, -height/2 + height/16);
 
   fill(255, 50);
-  textSize(25);
+  textSize(width/20);
   textAlign(RIGHT);
-  //DecimalFormat decimalFormat = new DecimalFormat("#.00");
-  //String frameRateString = decimalFormat.format(frameRate);
-  text(frameRate, width/2 - 5, -height/2 + 30);
-  //text(Float.toString(frameRate).substring(0, Math.min(4,Float.toString(frameRate).length())), width/2 - 5, -height/2 + 30);
+  text(frameRate, width/2 - width/100, -height/2 + height/16);
 
   theta += thetaAddSpeed;
 
-  if (theta % ((int)(Math.random()*300)) == 0 && circles.size() < maxCircles)
+  if (frameCount % ((int)(Math.random()*50)+20) == 0 && circles.size() < maxCircles)
   {
     circles.add(new Circle((float)Math.random()*360, (float)Math.random(), theta));
     if (circles.size() == maxCircles)
@@ -49,12 +51,12 @@ void draw()
   {
     Circle circle = circles.get(i);
     circle.addPoint(theta);
-    circle.decayTime += 1;
     circle.drawCircle();
-    if (circle.decayTime >= 5000)
-    {
+    //circle.decayTime += 1;
+    //if (circle.decayTime >= 5000)
+    //{
       //circles.remove(i);
-    }
+    //}
   }
 }
 
@@ -120,47 +122,47 @@ class CirclePoint
     fade -= thetaAddSpeed;
   }
 
-  public static int HSBtoRGB(float hue, float saturation, float brightness)
- {
- if (saturation == 0)
-   return convert(brightness, brightness, brightness, 0);
- if (saturation < 0 || saturation > 1 || brightness < 0 || brightness > 1)
-   throw new IllegalArgumentException();
- hue = hue - (float) Math.floor(hue);
- int i = (int) (6 * hue);
- float f = 6 * hue - i;
- float p = brightness * (1 - saturation);
- float q = brightness * (1 - saturation * f);
- float t = brightness * (1 - saturation * (1 - f));
- switch (i)
- {
- case 0:
- return convert(brightness, t, p, 0);
- case 1:
- return convert(q, brightness, p, 0);
- case 2:
- return convert(p, brightness, t, 0);
- case 3:
- return convert(p, q, brightness, 0);
- case 4:
- return convert(t, p, brightness, 0);
- case 5:
- return convert(brightness, p, q, 0);
- default:
- throw new InternalError("impossible");
- }
- }
- 
- private static int convert(float red, float green, float blue, float alpha)
-{
-if (red < 0 || red > 1 || green < 0 || green > 1 || blue < 0 || blue > 1 || alpha < 0 || alpha > 1)
-throw new IllegalArgumentException("Bad RGB values");
-int redval = Math.round(255 * red);
-int greenval = Math.round(255 * green);
-int blueval = Math.round(255 * blue);
-int alphaval = Math.round(255 * alpha);
-return (alphaval << 24) | (redval << 16) | (greenval << 8) | blueval;
-}
+  public int HSBtoRGB(float hue, float saturation, float brightness)
+  {
+    if (saturation == 0)
+      return convert(brightness, brightness, brightness, 0);
+    if (saturation < 0 || saturation > 1 || brightness < 0 || brightness > 1)
+      throw new IllegalArgumentException();
+    hue = hue - (float) Math.floor(hue);
+    int i = (int) (6 * hue);
+    float f = 6 * hue - i;
+    float p = brightness * (1 - saturation);
+    float q = brightness * (1 - saturation * f);
+    float t = brightness * (1 - saturation * (1 - f));
+    switch (i)
+    {
+    case 0:
+      return convert(brightness, t, p, 0);
+    case 1:
+      return convert(q, brightness, p, 0);
+    case 2:
+      return convert(p, brightness, t, 0);
+    case 3:
+      return convert(p, q, brightness, 0);
+    case 4:
+      return convert(t, p, brightness, 0);
+    case 5:
+      return convert(brightness, p, q, 0);
+    default:
+      throw new InternalError("impossible");
+    }
+  }
+
+  private int convert(float red, float green, float blue, float alpha)
+  {
+    if (red < 0 || red > 1 || green < 0 || green > 1 || blue < 0 || blue > 1 || alpha < 0 || alpha > 1)
+      throw new IllegalArgumentException("Bad RGB values");
+    int redval = Math.round(255 * red);
+    int greenval = Math.round(255 * green);
+    int blueval = Math.round(255 * blue);
+    int alphaval = Math.round(255 * alpha);
+    return (alphaval << 24) | (redval << 16) | (greenval << 8) | blueval;
+  }
 
   void show()
   {
@@ -168,10 +170,7 @@ return (alphaval << 24) | (redval << 16) | (greenval << 8) | blueval;
     float red = (rgb>>16)&0xFF;
     float green = (rgb>>8)&0xFF;
     float blue = rgb&0xFF;
-    //float[] rgb = hsvToRgb((100.0-fade) / 100.0, 1.0, 1.0);
-    //float red = rgb[0];
-    //float green = rgb[1];
-    //float blue = rgb[2];
+
     strokeWeight(ceil(1.0*width/100));
     stroke(red, green, blue, fade);
     point(x, y);
