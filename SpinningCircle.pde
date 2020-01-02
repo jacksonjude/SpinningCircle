@@ -1,5 +1,5 @@
 float thetaAddSpeed = 1;
-final int maxCircles = 40;
+final int maxCircles = 30;
 
 void setup()
 {
@@ -109,7 +109,7 @@ class Circle
     float y = (r * sin((currentTheta-thetaShift)*3.1415/180.0));
     float xTransformed = (x*cos(randomRotation*3.1415/180.0)) - (y*sin(randomRotation*3.1415/180.0));
     float yTransformed = (y*cos(randomRotation*3.1415/180.0)) + (x*sin(randomRotation*3.1415/180.0));
-    circlePoints.add(new CirclePoint(xTransformed, yTransformed, 100.0));
+    circlePoints.add(new CirclePoint(xTransformed, yTransformed, 255.0));
   }
 
   void drawCircle()
@@ -142,7 +142,7 @@ class CirclePoint
 
   void fadeMore()
   {
-    fade -= thetaAddSpeed;
+    fade -= 2.55*thetaAddSpeed;
   }
 
   public int HSBtoRGB(float hue, float saturation, float brightness)
@@ -189,7 +189,7 @@ class CirclePoint
 
   void show()
   {
-    int rgb = HSBtoRGB(100-fade / 100, 1, 1);
+    int rgb = HSBtoRGB(255-fade / 255, 1, 1);
     float red = (rgb>>16)&0xFF;
     float green = (rgb>>8)&0xFF;
     float blue = rgb&0xFF;
